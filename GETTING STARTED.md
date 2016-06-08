@@ -85,8 +85,9 @@ Now, just deploy!
 	...
 
 
-## Heroku KeepAlive Configuration
+## Heroku KeepAlive Configuration and WakeUp Scheduler
 
+#### KeepAlive Configuration
 > There is one special environment variable for Heroku. The default hubot Procfile marks the process as a 'web' process type, in order to support serving http requests (more on that in the scripting docs). The downside of this is that dynos will idle after an hour of inactivity. That means your hubot would leave after an hour of idle web traffic, and only rejoin when it does get traffic. This is extremely inconvenient since most interaction is done through chat, and hubot has to be online and in the room to respond to messages. To get around this, there's a special environment variable to make hubot regularly ping itself over http.
 
 hubot-heroku-keepalive is a built in script comes with default Hubot npm packages. It is a hubot script that keeps the hubot Heroku web dyno alive. Dont forget to apply the configurations to Heroku app:
@@ -116,6 +117,20 @@ heroku config:set HUBOT_HEROKU_KEEPALIVE_URL=$(heroku apps:info -s | grep web-ur
 ```
 heroku config:add TZ="America/New_York"
 ```
+
+#### Waking Hubot Up
+
+This script will keep the dyno alive once it is awake, but something needs to wake it up. You can use the [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler) to wake the dyno up. Add the scheduler addon by running:
+
+```
+heroku addons:create scheduler:standard
+```
+
+The scheduler must be manually configured from the web interface, so run `heroku addons:open scheduler` and configure it to run `curl ${HUBOT_HEROKU_KEEPALIVE_URL}heroku/keepalive` at the time configured for `HUBOT_HEROKU_WAKEUP_TIME`.
+
+![Heroku Scheduler Screenshot](https://cloud.githubusercontent.com/assets/173/9414275/2e4b67ea-4805-11e5-80d0-d6b26ead50ef.png)
+
+Note that the Scheduler's time is in UTC. If you changed your application's timezone with `TZ`, you'll need to convert that time to UTC for the wakup job. For example, if `HUBOT_HEROKU_WAKEUP_TIME` is set to `06:00` and `TZ` is set to `America/New_York`, you'll need to set the Scheduler to run at 10:00 AM UTC.
 
 
 ## Slack Customization
