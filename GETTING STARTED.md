@@ -85,6 +85,39 @@ Now, just deploy!
 	...
 
 
+## Heroku KeepAlive Configuration
+
+> There is one special environment variable for Heroku. The default hubot Procfile marks the process as a 'web' process type, in order to support serving http requests (more on that in the scripting docs). The downside of this is that dynos will idle after an hour of inactivity. That means your hubot would leave after an hour of idle web traffic, and only rejoin when it does get traffic. This is extremely inconvenient since most interaction is done through chat, and hubot has to be online and in the room to respond to messages. To get around this, there's a special environment variable to make hubot regularly ping itself over http.
+
+hubot-heroku-keepalive is a built in script comes with default Hubot npm packages. It is a hubot script that keeps the hubot Heroku web dyno alive. Dont forget to apply the configurations to Heroku app:
+
+hubot-heroku-keepalive is configured by four environment variables:
+
+* `HUBOT_HEROKU_KEEPALIVE_URL` - required, the complete URL to keepalive, including a trailing slash.
+* `HUBOT_HEROKU_WAKEUP_TIME` - optional,  the time of day (HH:MM) when hubot should wake up.  Default: 6:00 (6 am)
+* `HUBOT_HEROKU_SLEEP_TIME` - optional, the time of day (HH:MM) when hubot should go to sleep. Default: 22:00 (10 pm)
+* `HUBOT_HEROKU_KEEPALIVE_INTERVAL` - the interval in which to keepalive, in minutes. Default: 5
+
+You *must* set `HUBOT_HEROKU_KEEPALIVE_URL` and it *must* include a trailing slash – otherwise the script won't run. 
+You can find out the value for this by running `heroku apps:info`. Copy the `Web URL` and run:
+
+```
+heroku config:set HUBOT_HEROKU_KEEPALIVE_URL=PASTE_WEB_URL_HERE
+```
+
+If you want to trust a shell snippet from the Internet, here's a one-liner:
+
+```
+heroku config:set HUBOT_HEROKU_KEEPALIVE_URL=$(heroku apps:info -s | grep web-url | cut -d= -f2)
+```
+
+`HUBOT_HEROKU_WAKEUP_TIME` and `HUBOT_HEROKU_SLEEP_TIME` define the waking hours - between these times the keepalive will ping your Heroku app.  Outside of those times, the ping will be suppressed, allowing the dyno to shut down. These times are based on the timezone of your Heroku application which defaults to UTC.  You can change this with:
+
+```
+heroku config:add TZ="America/New_York"
+```
+
+
 ## Slack Customization
 
 https://api.slack.com/custom-integrations
