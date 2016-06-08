@@ -133,7 +133,9 @@ myhubot>
 
 ## References
 
-https://hubot.github.com/docs/
-https://github.com/slackhq/hubot-slack
-https://github.com/github/hubot/blob/master/docs/deploying/heroku.md
-https://github.com/felixrieseberg/npm-windows-upgrade
+https://hubot.github.com/docs/  
+https://github.com/slackhq/hubot-slack  
+https://github.com/github/hubot/blob/master/docs/deploying/heroku.md  
+https://github.com/felixrieseberg/npm-windows-upgrade  
+https://devcenter.heroku.com/articles/git#tracking-your-app-in-git  
+https://github.com/hubot-scripts/hubot-heroku-keepalive  
