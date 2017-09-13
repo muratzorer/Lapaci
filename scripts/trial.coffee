@@ -1,4 +1,4 @@
 module.exports = (robot) ->
 
-  robot.hear /badger/i, (res) ->
+  robot.hear /deneme/i, (res) ->
     res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERSSSSSSSSSSSSSSS"
