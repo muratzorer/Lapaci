@@ -1,4 +1,4 @@
 module.exports = (robot) ->
 
   robot.hear /deneme/i, (res) ->
-    res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERSSSSSSSSSSSSSSS"
+    robot.logger.debug "Received message #{res.message.text}"
